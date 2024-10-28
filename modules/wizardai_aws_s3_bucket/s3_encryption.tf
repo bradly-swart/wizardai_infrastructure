@@ -1,3 +1,4 @@
+# DesignNote: S3 encrypts at rest by default, we may want to use a managed kms key for encryption instead.
 resource "aws_s3_bucket_server_side_encryption_configuration" "kms" {
   count = var.create_bucket && var.s3_kms_key_arn != "null" ? 1 : 0
 
