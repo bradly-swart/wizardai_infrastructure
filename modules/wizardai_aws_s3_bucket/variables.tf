@@ -26,6 +26,13 @@ variable "object_ownership" {
     error_message = "Valid object_ownership values: 'BucketOwnerPreferred', 'ObjectWriter', 'BucketOwnerEnforced'."
   }
 }
+
+variable "s3_kms_key_arn" {
+  type        = string
+  description = "KMS key ARN to use for S3 serverside encryption. If none is pass default s3 encryption will be used."
+  default     = "null"
+}
+
 variable "tags" {
   description = "Tags map added to bucket"
   type        = map(string)
