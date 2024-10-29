@@ -43,7 +43,19 @@ resource "aws_s3_bucket_policy" "this" {
   count = var.create_bucket ? 1 : 0
 
   bucket = aws_s3_bucket.this[0].id
-  policy = data.aws_iam_policy_document.encryption_in_transit[0].json
+  policy = data.aws_iam_policy_document.bucket_policy[0].json
+}
+
+# DesignNote: Using source_policy_documents to allow for adding more content to bucket policy in future
+data "aws_iam_policy_document" "bucket_policy" {
+  count = var.create_bucket ? 1 : 0
+
+  source_policy_documents = compact([
+    data.aws_iam_policy_document.encryption_in_transit[0].json,
+    var.enforce_encrypted_uploads ? data.aws_iam_policy_document.encrypted_uploads[0].json : "",
+    length(var.readonly_access_arns) > 0 ? data.aws_iam_policy_document.readonly_access[0].json : "",
+    length(var.read_write_access_arns) > 0 ? data.aws_iam_policy_document.read_write_access[0].json : ""
+  ])
 }
 
 # TODO:
@@ -51,9 +63,7 @@ resource "aws_s3_bucket_policy" "this" {
 # object locking
 # update bucket policy to allow user to configure it (bring princiapl IAM role)
 # lifecycle rules to manage cost
+# Terraform docs
 # cloudfront OAI ?
 # cross-region replication
-
-# Further consideration:
-# monitoring - 4xx, deletes, acl changes
-# auditing - access logging
+# s3 endpoints for providing access

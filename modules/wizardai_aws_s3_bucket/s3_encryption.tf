@@ -1,6 +1,6 @@
 # DesignNote: S3 encrypts at rest by default, we may want to use a managed kms key for encryption instead.
 resource "aws_s3_bucket_server_side_encryption_configuration" "kms" {
-  count = var.create_bucket && var.s3_kms_key_arn != "null" ? 1 : 0
+  count = var.create_bucket && var.s3_kms_key_arn != null ? 1 : 0
 
   bucket = aws_s3_bucket.this[0].id
 
@@ -69,6 +69,37 @@ data "aws_iam_policy_document" "encryption_in_transit" {
       variable = "aws:SecureTransport"
       values = [
         "false"
+      ]
+    }
+  }
+}
+
+# DesignNote: Making the assumption any client side encryption would be done with separately managed KMS managed keys in the account created outside this module
+data "aws_iam_policy_document" "encrypted_uploads" {
+  count = var.create_bucket && var.enforce_encrypted_uploads ? 1 : 0
+
+  statement {
+    sid    = "EnforceEncryptedUploads"
+    effect = "Deny"
+
+    actions = [
+      "s3:PutObject",
+    ]
+
+    resources = [
+      "${aws_s3_bucket.this[0].arn}/*",
+    ]
+
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+
+    condition {
+      test     = "Null"
+      variable = "s3:x-amz-server-side-encryption-aws-kms-key-id"
+      values = [
+        "true"
       ]
     }
   }
