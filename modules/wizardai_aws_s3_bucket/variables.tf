@@ -47,7 +47,13 @@ variable "object_ownership" {
 variable "s3_kms_key_arn" {
   type        = string
   description = "KMS key ARN to use for S3 serverside encryption. If none is pass default s3 encryption will be used."
-  default     = null
+  default     = ""
+}
+
+variable "bucket_key_enabled" {
+  type        = bool
+  description = "Use S3 Bucket keys for KMS server side encryption, reduce cost of requests to KMS"
+  default     = false
 }
 
 variable "enforce_encrypted_uploads" {

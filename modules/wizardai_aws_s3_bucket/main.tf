@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "this" {
-  count = var.create_bucket ? 1 : 0 // DesignNote: allow conditional creation here, count meta-arg cannot be used when calling the module.
+  count = var.create_bucket ? 1 : 0
 
   # DesignNote: Avoiding using bucket_prefix to keep the name config in one place.
   bucket = local.bucket_name
@@ -29,8 +29,6 @@ resource "aws_s3_bucket_versioning" "status" {
   }
 }
 
-# DesignNote: Chances are we dont want anyone to make publicly accessible buckets,
-# any data publicly accessible should rather be done through and api/cloudfront
 resource "aws_s3_bucket_acl" "private" {
   count = var.create_bucket ? 1 : 0
 
@@ -70,9 +68,3 @@ data "aws_iam_policy_document" "bucket_policy" {
     var.oai_id != "" ? data.data.aws_iam_policy_document.oai[0].json : ""
   ])
 }
-
-# TODO:
-# lifecycle rules to manage cost
-# cross-region replication
-# s3 endpoints for providing access
-# Additional policies - storage lense, inventory, analytics, logdelivery/access logs, explicit delete deny except for writer users.

@@ -1,3 +1,17 @@
+## Module Notes
+### Design Notes:
+- Conditional bucket creation with `create_bucket` variable as count meta-arg cannot be used when calling the module.
+
+- Chances are we dont want anyone to make publicly accessible buckets,
+any data publicly accessible should rather be done through and api/cloudfront
+
+- encryption at rest - If an external KMS key is used the module assumes the keys policy has the required permissions, as opposed to creating a new KMS key and managing its resource policy inside the module. It does make usability more complex, the assumption that someone who needs to use KMS for encryption is willing to do the config overhead. There is also a cost consideration depending on the usage pattern and instead enable S3 bucket keys.
+
+### Future Improvements
+- lifecycle rules to manage cost moving to infrequent access and glacier
+- cross-region replication depending where other resources are located
+- Additional policies - storage lense, inventory, analytics, logdelivery/access logs, explicit delete deny except for writer users.
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
