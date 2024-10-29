@@ -35,7 +35,7 @@ variable "versioning" {
 
 variable "object_ownership" {
   type    = string
-  default = "BucketOwnerPreferred"
+  default = "BucketOwnerEnforced"
 
   validation {
     condition     = contains(["BucketOwnerPreferred", "ObjectWriter", "BucketOwnerEnforced"], var.object_ownership)
@@ -71,4 +71,10 @@ variable "read_write_access_arns" {
   type        = list(string)
   description = "List of users or roles to give write access to"
   default     = []
+}
+
+variable "oai_id" {
+  type        = string
+  description = "CloudFront origin access identity ID"
+  default     = ""
 }

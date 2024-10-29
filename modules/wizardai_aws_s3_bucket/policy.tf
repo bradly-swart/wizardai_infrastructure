@@ -45,3 +45,27 @@ data "aws_iam_policy_document" "read_write_access" {
     }
   }
 }
+
+
+data "aws_iam_policy_document" "oai" {
+  count = var.create_bucket && var.oai_id != "" ? 1 : 0
+  statement {
+    sid    = "AllowCloudFrontOAI"
+    effect = "Allow"
+
+    actions = [
+      "s3:GetObject"
+    ]
+
+    resources = [
+      "${aws_s3_bucket.this[0].arn}/*"
+    ]
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${var.oai_id}"
+      ]
+    }
+  }
+}
