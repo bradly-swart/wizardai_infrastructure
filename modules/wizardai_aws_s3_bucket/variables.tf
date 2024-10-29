@@ -24,8 +24,9 @@ variable "force_destroy" {
 }
 
 variable "versioning" {
-  type    = string
-  default = "Enabled"
+  type        = string
+  description = "Enable object versioning"
+  default     = "Enabled"
 
   validation {
     condition     = contains(["Enabled", "Disabled"], var.versioning)

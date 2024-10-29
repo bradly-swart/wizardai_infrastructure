@@ -50,7 +50,7 @@ No modules.
 | <a name="input_readonly_access_arns"></a> [readonly\_access\_arns](#input\_readonly\_access\_arns) | List of users or roles to give read access to | `list(string)` | `[]` | no |
 | <a name="input_s3_kms_key_arn"></a> [s3\_kms\_key\_arn](#input\_s3\_kms\_key\_arn) | KMS key ARN to use for S3 serverside encryption. If none is pass default s3 encryption will be used. | `string` | `null` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags map added to bucket | `map(string)` | `{}` | no |
-| <a name="input_versioning"></a> [versioning](#input\_versioning) | n/a | `string` | `"Enabled"` | no |
+| <a name="input_versioning"></a> [versioning](#input\_versioning) | Enable object versioning | `string` | `"Enabled"` | no |
 
 ## Outputs
 
