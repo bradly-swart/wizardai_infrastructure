@@ -4,6 +4,9 @@ resource "aws_s3_bucket" "this" {
   # DesignNote: Avoiding using bucket_prefix to keep the name config in one place.
   bucket = local.bucket_name
 
+  force_destroy = var.force_destroy
+  # object_lock_enabled = var.object_lock_enabled # Probably want to enable object locking configuration at some point.
+
   tags = var.tags
 }
 
@@ -14,6 +17,15 @@ resource "aws_s3_bucket_ownership_controls" "object_ownership" {
 
   rule {
     object_ownership = var.object_ownership
+  }
+}
+
+resource "aws_s3_bucket_versioning" "status" {
+  count = var.create_bucket ? 1 : 0
+
+  bucket = aws_s3_bucket.this[0].id
+  versioning_configuration {
+    status = var.versioning
   }
 }
 
@@ -59,9 +71,6 @@ data "aws_iam_policy_document" "bucket_policy" {
 }
 
 # TODO:
-# versioning
-# object locking
-# update bucket policy to allow user to configure it (bring princiapl IAM role)
 # lifecycle rules to manage cost
 # Terraform docs
 # cloudfront OAI ?

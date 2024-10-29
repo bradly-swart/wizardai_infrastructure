@@ -17,6 +17,22 @@ variable "create_bucket" {
   default     = true
 }
 
+variable "force_destroy" {
+  type        = bool
+  description = "Allow objects to be deleted when deleting the bucket, setting to false will cause an error when deleting and non-empty bucket"
+  default     = true
+}
+
+variable "versioning" {
+  type    = string
+  default = "Enabled"
+
+  validation {
+    condition     = contains(["Enabled", "Disabled"], var.versioning)
+    error_message = "Valid versioning values: 'Enabled', 'Disabled'."
+  }
+}
+
 variable "object_ownership" {
   type    = string
   default = "BucketOwnerPreferred"
