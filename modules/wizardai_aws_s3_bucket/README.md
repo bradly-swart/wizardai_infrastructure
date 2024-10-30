@@ -25,6 +25,19 @@ There is also a cost consideration depending on the usage pattern and can option
 - cloudtrail data events
 - Additional policies - storage lense, inventory, analytics, logdelivery/access logs, explicit delete deny except for writer users.
 
+## Example Usage:
+```
+module "bucket" {
+  source = "git@github.com:bradly-swart/wizardai_infrastructure.git//modules/wizardai_aws_s3_bucket?ref=v1.0"
+
+  bucket_name    = "learningdata"
+  environment    = "development"
+  
+  readonly_access_arns   = ["arn:aws:iam::123456789012:role/s3readonlyuser"]
+  read_write_access_arns = ["arn:aws:iam::123456789012:role/s3adminrole"]
+}
+```
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
