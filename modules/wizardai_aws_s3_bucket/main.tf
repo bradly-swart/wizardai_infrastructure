@@ -65,6 +65,6 @@ data "aws_iam_policy_document" "bucket_policy" {
     var.enforce_encrypted_uploads ? data.aws_iam_policy_document.encrypted_uploads[0].json : "",
     length(var.readonly_access_arns) > 0 ? data.aws_iam_policy_document.readonly_access[0].json : "",
     length(var.read_write_access_arns) > 0 ? data.aws_iam_policy_document.read_write_access[0].json : "",
-    var.oai_id != "" ? data.data.aws_iam_policy_document.oai[0].json : ""
+    var.oai_id != "" ? data.aws_iam_policy_document.oai[0].json : ""
   ])
 }
